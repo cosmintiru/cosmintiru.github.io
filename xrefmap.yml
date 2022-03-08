@@ -7,6 +7,9 @@ references:
 - uid: product-types
   name: Overview
   href: addendum/products.html
+- uid: sum-types
+  name: TODO
+  href: addendum/sum-types.html
 - uid: working-with-types
   name: Working with types
   href: labs/working-with-types.html

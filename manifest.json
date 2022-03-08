@@ -12,7 +12,7 @@
           "hash": "MinmvGBPuSE0lO83YsgFjcWoSThfOQt0pfabXwN6PZg="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -24,7 +24,19 @@
           "hash": "5sOp81OSY/B+WieBI7d2nRI+yFvOzXF2q65vYZXZWu8="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "addendum/sum-types.md",
+      "output": {
+        ".html": {
+          "relative_path": "addendum/sum-types.html",
+          "hash": "KArjy+ELbgx8RHx4YQevfGiXVBB0sxEOs/xeSEfR5L0="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -33,7 +45,7 @@
       "output": {
         ".html": {
           "relative_path": "addendum/toc.html",
-          "hash": "YC/gGJMiYAjwI3umKf9kLt3QuCctlRvHFypROaN1CMs="
+          "hash": "T/6JCynsDkwG8nL/D5YfiJ9WSZMGEylEXjhSwqtXzJc="
         }
       },
       "is_incremental": false,
@@ -99,15 +111,12 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "UidNotFound"
-      ],
       "type": "Conceptual",
       "source_relative_path": "labs/working-with-types.md",
       "output": {
         ".html": {
           "relative_path": "labs/working-with-types.html",
-          "hash": "PLIPYFQrUtpBsuhcc+lU/Zr0lyGOoQQOUnGJoAugEXw="
+          "hash": "ogBCOXNYk7CP0W3BOrV1tsoR++qwJHVwTHEM2yCoN4o="
         }
       },
       "is_incremental": false,
@@ -138,8 +147,8 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 6,
-          "skipped_file_count": 5
+          "total_file_count": 7,
+          "skipped_file_count": 6
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
