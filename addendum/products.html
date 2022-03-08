@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Overview </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Overview ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="product-types">
+<h2 id="overview">Overview</h2>
+
+<p>Ok, you've probably ended up here from the entities/values overview from L1. We've also defined data in terms of sets <a class="xref" href="basic-types.html">data in terms of sets</a>. Whenever we want to <strong>compose</strong> data, the universal construction of that is a product. For example, we know that a Cartesian product of two sets it's just a pair.</p>
+<p>In the following example we have an example of a simple tuple, given an integer and a string. The value that we obtain by &quot;multiplying&quot; that int with a string it's just a another value that carries those two constituents together. In mainstream programming languages we tend to encounter this construction in simple data types (or classes). Take for example, the classic 'Person' type that has a 'name' and an 'age'.</p>
+<pre><code class="lang-fsharp">let pair1: int * string = (42, &quot;Marvin&quot;)
+let elem1 = 42
+let elem2 = &quot;Marvin&quot; // the paranoid Android
+let pair: int * string = (elem1, elem2)
+</code></pre>
+<h3 id="declarative-way">Declarative way</h3>
+<p>The purpose of these data types should be quite obvious. We want to carry around related data and access it based on our needs. The way we access that data is easy. We just 'dot' into that data type and access whatever we need. However, in a functional language if we 'construct' a particular data type, the inverse operation of that 'construction' is to 'deconstruct' it, which allows us to introduce a powerfull concept that we've going to use quite extensively from now on, <a href="https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/pattern-matching">pattern matching</a>.</p>
+<pre><code class="lang-fsharp">match pair1 with
+    | (elem1, elem2) -&gt; printf $&quot;%s{elem2} %d{elem1}&quot;
+</code></pre>
+<p>This little 'trick' allows us to break down various data types at an expression level. If we look at the initial code sample we'll see that the way we've constructed this custom data type (or pair) is via an expression - basically by declaring how that data type should look like.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>The distinction between 'imperative' and 'declarative' is quite important, and it's basically one of the goals of this class.</p>
+</div>
+<h3 id="imperative-way">Imperative way</h3>
+<p>For the sake of argument, let's implement the same thing in C#:</p>
+<pre><code class="lang-csharp">var pair = (42, &quot;Marvin&quot;);
+Console.WriteLine(pair.Item1);
+Console.WriteLine(pair.Item2);
+</code></pre>
+<p>Here, we'll see that we've accessed that custom data type represented via a simple tuple using two accessors: <strong>Item1</strong> and <strong>Item2</strong>.</p>
+<p>Here, we're expressing the direct intent of accessing either the first element of the pair or the other, in a rather imperative way.</p>
+<p>Both declarative and imperative approaches can provide the same outcome for this simple task, however, we're going to exploit the <strong>declarative</strong> one as much as possible to underline its advantages.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>While I'm writing this I'm not completely sure whether this is the best example of describing the differences between 'declarative' and 'imperative', but I'll make sure that I'll underline the differences whenever I can.</p>
+</div>
+<h2 id="the-functional-constructs">The functional constructs</h2>
+<p>Ok, so a product data type it's just a composition of two existing sets. How is this related to functional programming?</p>
+<p>Regardless if we use the 'declarative' or 'imperative' way of breaking down a product type, the most helpful action that we can do against it is to be able to <strong>project</strong> it.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>The notion of 'projection' is quite important, and we'll use this term in multiple scenarios. From simple data modelling techniques to 'complex' software architectures that rely on projections to solve various problems.</p>
+</div>
+<h3 id="what-is-a-projection">What is a projection?</h3>
+<p>A projection can be defined as a simple morphism between two data sets.</p>
+<pre><code class="lang-fsharp">let someProjection(source: ACustomType): SomeOtherCustomType
+</code></pre>
+<p>I hope that the previous definition is quite clear. We have a simple function that takes as an argument a set (represented by the type 'ACustomType') and return a value from a different set (represented by the type 'SomeOtherCustomType'). Now that we know this:</p>
+<pre><code class="lang-fsharp">let fst(pair: (int, string)): int 
+let snd(pair: (int, string)): string
+</code></pre>
+<p>I know for a fact that C# doesn't have the 'fst' and 'snd' functions, and maybe F# has them but those are not familiar to me at the moment, but Haskell definetely has them. If anyone is curious, this is their Haskell definition and implementation:</p>
+<pre><code class="lang-Haskell">fst :: (a, b) -&gt; a
+fst (x, y) = x
+
+snd :: (a, b) -&gt; b
+snd (x, y) = y
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Even though the implementation may seem weird, that's code that can be run, and this approach it's also based on one of the 'pattern matching flavors that Haskell has.</p>
+</div>
+<p>This should be straight forward so far (and rather lame, to be honest), but a simple concept like this can be used to build more complex stuff.</p>
+<p>Let's take for example, a tuple of three elements (int, int, bool), also known as a triple. I'm also going to use Haskell syntax for brevity (one liners!).</p>
+<pre><code class="lang-Haskell">p :: (Int, Int, Bool) -&gt; Int
+</code></pre>
+<p>Given the previous intuition (using <strong>fst</strong> and <strong>snd</strong>), it's not something that we can easily use to cover this slightly more complex situation.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>If you try a triple in C# the compiler will output the Item1, Item2 and Item3 properties for that data type, but there's no fun in that. The following explanation means to link composite data types to composition (or function composition).</p>
+</div>
+<p>Going deeper into the most abstract aspects of this topic doesn't really make sense for what we want to achieve here. Probably this article will be redacted for coherence and other type in information related to this topic. Reasoning about morphisms that might be a good candidate for a product type is a little bit overkill now. If anyone is interested, you can find a very comprehensive deep dive <a href="https://www.youtube.com/watch?v=Bsdl_NKbNnU">here (Bartosz Milewski's MIT course)</a>.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

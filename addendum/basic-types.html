@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Basic data types </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Basic data types ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="basic-data-types">
+<h1 id="basic-data-types">Basic data types</h1>
+
+<h2 id="introduction">Introduction</h2>
+<p>The first lab aimed to make an introduction across basic data types. This shouldn't be something unusual, considering that all programming exercises did so far used some sort of data types one way or another. The purpose of this exercise is to shape the reasoning behind them. For conciseness, I'm going to use F# for code samples and point to various computer science resources behind them. The principle that we're going to center everything is composition.</p>
+<p>The goal is the master two types of lenses:</p>
+<ol>
+<li>How we view data types from a DDD perspective (entity types/value types)</li>
+<li>How we view data types from a CS perspective (product types/coproduct types - aka sum types/discriminated unions)</li>
+</ol>
+<h2 id="basic-data-typessets">Basic data types/sets</h2>
+<p>In any typed language we're going to find some basic data types that we can use, usually called primitive data types, starting with <code>string</code>, <code>boolean</code>, <code>integer</code>, <code>long</code>, etc, which are the basic data structure that we build everything on top of. Let's take <code>integer</code> for example.</p>
+<h3 id="all-integers-are-odd-or-even">All integers are odd or even</h3>
+<pre><code class="lang-fsharp">let x: int = 42
+</code></pre>
+<p>All I did here was to instantiate a simple variable called <code>x</code>, which has the <code>value</code> 42. Whenever we work with this types of variables what we are telling the compiler is that we can <code>assign</code> any value that belongs to the set of integers, where the intuition should come naturally from mathematics. We know the basic laws that govern them and we tend to use them quite often while working with them. The key point here being that it's not the <code>42</code> that we're interested is the actual definition of this type <code>let x: int</code> that we care about.</p>
+<p>This tells the compiler that it can only accept values from a particular range. <code>let x: int = 'something'</code> will never typecheck. Let's take another example, by defining a simple morphism that simply projects a value from the set of <code>integers</code> to <code>bool</code>.</p>
+<pre><code class="lang-fsharp">let isEven (x: int) : bool = (x % 2) = 0
+</code></pre>
+<p>This header definition of this function can be read as <code>int -&gt; bool</code>. The implementation details of this function are quite obvious, and the reason why it's so obvious is because we already know how to reason about it. We take an integer, apply a well-know operator against it and we find out whether that integer is even or not. We can take <code>any</code> integer and the function will <code>always</code> behave as expected, simply because the set that we are operating against already encodes this property. This means that from logical standpoint, we can reason about it in an '<a href="https://en.wikipedia.org/wiki/Universal_quantification">universal quantification</a>' way. From this, we can derive that this <code>isEven</code> function is pure, therefore <code>deterministic</code>.</p>
+<h3 id="not-all-strings-are-email-addresses">Not all strings are email addresses</h3>
+<p>The integer one was a trivial example. We should be able to reason about everything that we code in the same way, however, we're rarely in a purely mathematical <code>domain</code> where we can just piggyback on this type of intuition. And this intuition kind of breaks as soon as we change the primitive type. Let's take <code>string</code> for example.</p>
+<pre><code class="lang-fsharp">let emailAddress: string = &quot;some address&quot; //not even a valid assignment
+</code></pre>
+<p>The first thing we notice here is that the domain has completely change. Now we're not referring strictly to a mathematical concept, but rather we're trying to handle simple email addresses. Even though we are handling strings, there are a couple of <code>pure</code> morphisms that we can work with:</p>
+<pre><code class="lang-fsharp">let isEmpty(emailAddress: string): bool = String.IsNullOrWhiteSpace(address)
+let length(emailAddress: string): int = address.Length
+</code></pre>
+<p>The reason why can we call those two morphisms <code>pure</code> (note here: let's make an abstraction that the string itself can be <code>null</code>, that's a completely separate topic) it's because the implementation details of them rely on the <code>properties</code> of the <code>string</code> set (all email addresses are strings).</p>
+<p>However, strings are used to denote various domain related pieces of information, like in our case, a simple email address. This type of definitions usually come with other type of code attached to it. In an OO context, any given product that holds a string as an email address, most likely (or hopefully) comes with a method that validates its state (or inputs). We're just going to define it as a simple function:</p>
+<pre><code class="lang-fsharp">let isValid(emailAddress: string): bool = ???
+</code></pre>
+<p>Now we've escaped the logical boundaries that a set can provide to us and we've entered the real of domain. What does a valid address mean and how would we implement that?</p>
+<p>The short answer is that we don't really know. There's no logical, direct property of the set of strings that can be bound to this requirement. There's no 'universal quantification' that can be used to prove this type of statement by simply observing the type (or set) that we're operating on. In order to achieve that, we'll have to define those rules in terms of business logic (i.e. the implementation details of this function). More on this when we'll cover the <code>functions</code> topic.</p>
+<p>The point here being that leaving everything aside from an implementation standpoint, we should be able to infer certain properties about a domain concept in the same way we did for <code>integers</code>, so that when we define the same function:</p>
+<pre><code class="lang-fsharp">let isValid(emailAddress: string): bool = ???
+</code></pre>
+<p>we can extrapolate what an address means and all the business properties attached to it.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Those business properties are usually named <code>invariants</code>.</p>
+</div>
+<p>However, this subject tends to easily get side tracked with other particularities. If we'd have to summarize:</p>
+<ol>
+<li>All integers are either even or odd</li>
+<li>Not all strings are email addresses.</li>
+</ol>
+<ol start="2">
+<li>needs to be a statement as powerful as 1).</li>
+</ol>
+<h2 id="a-more-practical-example">A more practical example</h2>
+<p>For example, if we'd start now to model a simple Order object, it would probably look like this:</p>
+<pre><code class="lang-fsharp">type OrderLine = {
+    OrderLineId: int
+    Price: int
+}
+
+type Order = {
+    Id: int
+    CustomerId: int
+    ShippingAddress: string
+    BillingAddress: string
+    OrderLines: OrderLine list
+}
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>The C# equivalent would be just a simple class (or record), which has the same four properties defined.</p>
+</div>
+<p>For the sake of example, I've decided to implement those two entities using primitives. But:</p>
+<ol>
+<li>Are all integers OrderIds?</li>
+<li>Are all integers CustomerId?</li>
+<li>If I assign the value from an OrderId property to CustomerId, should that work?</li>
+<li>Are all strings BillingAddresses and ShippingAddresses?</li>
+</ol>
+<p>Obviously, the answer is <code>no</code> to all of those questions. Using pure primitives to describe domain related properties is usually a design smell from a DDD perspective. The fact that we've just named a particular field after its logical correspondent it's not enough.</p>
+<pre><code class="lang-fsharp">type OrderId = int
+type OrderLineId = int
+type CustomerId = int
+type EmailAddress = Undefined
+type CustomerInfo = Undefined
+type ShippingAddress = Undefined
+type BillingAddress = Undefined
+type Price = Undefined
+
+type OrderLine = { OrderLineId: OrderLineId; Price: Price }
+
+type Order =
+    { Id: OrderId
+      CustomerId: CustomerId
+      ShippingAddress: ShippingAddress
+      BillingAddress: BillingAddress
+      OrderLines: OrderLine list 
+    }
+</code></pre>
+<p>Now if we look at our updated entity model, the type system has changed a little bit (even though for brevity I've left some of the wrapper types Undefined). Now our <code>Order</code> is much closed to its domain definition. Even though <code>OrderId</code> and <code>CustomerId</code> properties are backed by the same data type (<code>int</code>), those are now categorized into different types, which stops making them interchangeable.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

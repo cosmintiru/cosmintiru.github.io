@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Working with types </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Working with types ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="working-with-types">
+<h1 id="working-with-types">Working with types</h1>
+
+<p>Whenever working in BLOBAs, the domains are quite different (unless you are tasked to write yet-another-shopping-cart-like-we-do-in-this-lab), but the patterns of breaking down that domain and implementing it are the same.</p>
+<p>From a data standpoint, modeling a domain boils down to the following problems:</p>
+<ol>
+<li>Defining <strong>simple values</strong></li>
+<li>Creating complex types with AND (<a class="xref" href="../addendum/products.html">product types</a>)</li>
+<li>Creating complex types with OR (<a href="xref:sum-types">sum types</a>)</li>
+<li>Creating workflows</li>
+</ol>
+<p>In this particular article we're going to focus on how can we segregate the basic types with respect to a domain.</p>
+<h2 id="simple-values">Simple values</h2>
+<p>Simple values are the cornerstone of modeling a domain, and probably the most overlooked technique when using a mainstream language that doesn't advertise a proper usage of the type system.
+The issue here is that most of the time using primitives is very, very convenient, and we rarely see this approach discouraged. Given the fact that we are in a 'shopping-cart' domain, which is backed by some sort of a database, the notion of a <code>CustomerId</code> is usually translated into a simple <code>int</code> (or <code>long</code>).</p>
+<p>As we stated in the <a class="xref" href="../addendum/basic-types.html">basic data types as sets</a>, that all <code>email addresses</code> are <code>strings</code>, but not all <code>strings</code> are <code>email addresses</code>, the same applies here. All <code>CustomerIds</code> are <code>int</code>, but not all <code>int</code> are <code>CustomerId</code>. Which can lead to the following scenario:</p>
+<pre><code class="lang-fsharp">let customerId: int = 42
+let findCustomer(customerId: int): Customer = failwith &quot;We shall ignore implementation&quot;
+let findOrder(orderId: int): Order = failwith &quot;We shall ignore implementation&quot;
+</code></pre>
+<p>In the previous code I just assumed that we don't know anything about this primitive abuse, and we've just defined a variable that is <code>named</code> customerId (actually, this is the only domain reference that we are going to use) and then implemented two simple functions that take as an argument a <code>customerId</code> and an <code>orderId</code>. Both of them <code>int</code>. Then I can do this:</p>
+<pre><code class="lang-fsharp">findCustomer(customerId) //compiler is happy
+findOrder(customerId)  //compiler is also happy
+</code></pre>
+<p>See the problem in the code above? The compiler doesn't really care that I've <code>named</code> a variable in a particular way, embedding domain knowledge into the naming conventions (which is something that <code>we have to do</code>), it only cares about the types that I've specified as arguments. Both of them are <code>int</code>. If I send a <code>customerId</code> instead of an <code>orderId</code>, yeah, it's going to be happy.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>A couple of years ago while being on C# I've ended up into this situation, by mistakenly swapping two identifiers that were using really close naming conventions that got overlooked on Pull Requests. That ended up in a huge data corruption that had to be manually fixed. This was just human error that the compiler was blind to.</p>
+</div>
+<h3 id="how-can-we-fix-this">How can we fix this?</h3>
+<p>As stated before, not all <code>int</code>s are <code>customerId</code>s, let's just create a simple wrapper type that:</p>
+<ol>
+<li>Tags the correct type.</li>
+<li>Is able to encapsulate the creation of those simple values using Smart constructors (TODO)</li>
+</ol>
+<pre><code class="lang-fsharp">type CustomerId =
+    | CustomerId of int
+
+let customerId: CustomerId = CustomerId(42)
+let findCustomer(customerId: CustomerId): Customer = failwith &quot;We shall ignore implementation&quot;
+let findOrder(orderId: OrderId): Order = failwith &quot;We shall ignore implementation&quot;
+</code></pre>
+<p>Ok, we've lifted those two functions to take the <code>type tag</code> as an argument, therefore the following invocations:</p>
+<pre><code class="lang-fsharp">findCustomer(customerId) //compiler is happy
+findOrder(customerId)  //compiler is NOT happy
+</code></pre>
+<p>In a language with proper type system support, this approach should not be cumbersome to use. Should have the same level of complexity as with using primitives. I tend to believe that the advantages are quite obvious.</p>
+<h2 id="for-product-types">For <code>product</code> types...</h2>
+<p>...I highly recommend going through <a class="xref" href="../addendum/products.html">the product types article</a>, which also contains examples and other computer science references.</p>
+<h2 id="for-sum-types">For <code>sum</code> types...</h2>
+<p>...I highly recommend going through [the sum types article](xref: sum-types), which also contains examples and other computer science references.</p>
+<h1 id="identity">Identity</h1>
+<p>We know know what's the basic modus-operandi for handling data types, let's see how can we segregate them from a domain perspective. This is not a matter of implementation, it's a matter of how we reason about the concepts that we aim to represent through those data types. The question is: does whatever I want to represent via a data type has <code>identity</code> or not.</p>
+<p>In DDD, objects with a persistent identity are called <code>entities</code> and objects without a persistent identity are called <code>values</code>.</p>
+<h2 id="value-objects">Value objects</h2>
+<p>In order to get <code>identity</code> right, we can try to reason about it in terms of <code>equality</code>. Let's say, for example, that in my <code>shopping cart</code> domain I define the notion of a <code>product code</code>.</p>
+<pre><code class="lang-fsharp">type ProductCode = 
+    | ProductCode of string
+let productCode1 = ProductCode(&quot;Adibas&quot;)
+let productCode2 = ProductCode(&quot;Adibas&quot;)
+</code></pre>
+<p>Are <code>productCode1</code> and <code>productCode2</code> equal? Well, from an implementation perspective they are, because this is how the type system works.</p>
+<p>Let's rephrase that: are <code>productCode1</code> and <code>productCode2</code> <code>interchangable</code>? Do they influence my <code>domain</code> in any way, shape or form if I use one instead of the other given they have the same value? The answer is yes, those two <code>values</code> are interchangeable.</p>
+<p>Usually <code>value</code> types are just <code>basic types</code> used to build entities. However, don't confuse <code>values</code> with <code>single union tag</code>, like we used in an example from above. We can have value types expressed as either <code>product</code> or <code>sum</code> types. An example from Scott Wlaschin's book:</p>
+<pre><code class="lang-fsharp">let address1 = {StreetAddress = &quot;123 Main St&quot;; City = &quot;New York&quot;; Zip=&quot;90001&quot;}
+let address2 = {StreetAddress = &quot;123 Main St&quot;; City = &quot;New York&quot;; Zip=&quot;90001&quot;}
+printfn &quot;%b&quot; (address1 = address2) //will print 'true'
+</code></pre>
+<p>You shouldn't identify a persistent identity in those two objects.</p>
+<h2 id="entities">Entities</h2>
+<p>When things start to become a bit more complex, and we start to get closer to the real world, objects start to require <code>identity</code>. For example:</p>
+<ol>
+<li>If an order is altered behind the scenes because one of the items is no longer available. Does the previous instance of the order and the new instance of the order <code>represent</code> different things? No. They're still the same order.</li>
+<li>If a customer changes his billing address, is it a different customer? No. From a domain perspective it represents the same thing.</li>
+<li>The example from the course: describing an <code>apple</code> it's just a value. If that <code>apple</code> gains the property of ownership (i.e. it's <code>my apple</code>), then that <code>has</code> to be viewed through the lenses of an <code>entity</code>.</li>
+</ol>
+<pre><code class="lang-fsharp">type Order =
+    { Id: OrderId
+      CustomerId: CustomerId
+      ShippingAddress: ShippingAddress
+      BillingAddress: BillingAddress
+      OrderLines: OrderLine list 
+    }
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

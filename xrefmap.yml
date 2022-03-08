@@ -1,3 +1,12 @@
 ### YamlMime:XRefMap
 sorted: true
-references: []
+references:
+- uid: basic-data-types
+  name: Basic data types
+  href: addendum/basic-types.html
+- uid: product-types
+  name: Overview
+  href: addendum/products.html
+- uid: working-with-types
+  name: Working with types
+  href: labs/working-with-types.html

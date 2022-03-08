@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Motivation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Motivation ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="motivation">Motivation</h1>
+
+<p>This started based on the feedback that we've got for the PSSC lab. The curriculum that we've covered in the past two years tried to trim down the technology aspects that we've used to do prior to that, and focus more on modeling from a software engineering standpoint rather than the previously mentioning tech-only aspects. So, instead of going from day one into HTTP platforms, message brokers or arbitrary platforms that we thought were cool for those days, we've tried to focus more on what we have at our disposal to create more sustainable and reliable code.</p>
+<p>The way we tried to accomplish that was by applying Domain Driven Design (or DDD) through the lenses of functional programming. Functional programming by itself has a very abstract nature that hasn't really made it's way into mainstream programming, but things have changed in the past couple of years and they will continue down this path from now on, for some very obvious reasons.</p>
+<h2 id="object-oriented-programming">Object Oriented Programming</h2>
+<p>One might argue that the mainstream programming patterns and practices - the obvious Object Oriented Programming along with Object Oriented Design tricks, are the way to go. Even though there has been a collective effort to address the shortcomings of this paradigm, the fact that it required such an effort to achieve that, it's a clear proof that it's not the right tool for the job. Simply because its design it's not rooted in the main rules that govern the entire field of logic. There's also the evolutionary process that this paradigm took, starting from the original OOP approach in Smalltalk (long time ago), which was just a paradigm derived out of the <a href="https://arxiv.org/vc/arxiv/papers/1008/1008.1459v8.pdf">Actor model described by Carl Hewitt</a> in the 70's, which at its core it's just a &quot;mathematical theory that treats 'Actors' as the universal primitives of concurrent digital computation&quot;. Alan Kay's Smalltalk emphasized the <a href="https://wiki.c2.com/?AlanKaysDefinitionOfObjectOriented">following properties, as an OO language</a>:</p>
+<ol>
+<li>Everything is an object</li>
+<li>Objects communicate by sending and receiving messages (in terms of objects)</li>
+<li>Objects have their own memory (in terms of objects)</li>
+<li>Every object is an instance of a class</li>
+<li>The class holds the shared behavior for its instances</li>
+<li>To evaluate a program list, control is passed to the first object and the remainder is treated as its message</li>
+</ol>
+<h3 id="brief-history">Brief history</h3>
+<p>These constructive concepts met the force of the main imperative language at that time (and to some extent it's still the case), of C. After quite some time C++ took traction, but a series of compromises had to be made that simply broke the original model. Once this happened, it took its natural evolution course up until it met another force of nature through the form of marketing, once <a href="https://www.theregister.com/2003/06/09/sun_preps_500m_java_brand/">Sun Microsystems decided to push $500 million into the Java brand</a>, to steal market share from C++, and Microsoft did the same thing with C# (to steal market share from Java), and here we are today.
+However, if we look at the programming model, all we have to do is to program against an object we don't have to look inside the object, we can forget about implementation and just look at the surface of the object (i.e. the interface), then we can combine them to build the bigger picture, so on and so forth. But what's the main idea behind this approach?</p>
+<ol>
+<li>Abstraction - we want to program against the 'surface' of an object, or hide details. We're not supposed to know how those are implemented.</li>
+<li>Composabillity - we want to solve problems independently and be able to put the genie back together</li>
+</ol>
+<h3 id="shortcomings">Shortcomings</h3>
+<p>Given these two main characteristics we should be able to reuse objects, change their context and have them used in a different problem with no real hustle, and everything is rainbow and unicorns. However, there is something wrong with this and it became more and more painfully once we shifted towards concurrent and parallel code, because concurrency doesn't mix well with OOP. Objects hide implementation and they hide exactly the wrong thing which makes them not composable. And there is one big reason why this is not the case, even though the theory sounds so promising. The rise of parallel and concurrent programming. Every useful program needs to own some state, and matter of fact our main job is to make sure that we're joggling with that state in a predictable manner. But if those state changes are completely hidden, and on top of that we start to share data between objects (C# passes almost everything via references, think of them as pointers), and when we mix sharing, mutation and concurrent/parallel programming what we are actually getting is a level of abstraction on top of data races. Long story short, the BLOBA (Boring line-of-business applications) are predominantly claiming to use OO, by avoiding object state entirely and ending up handling that state almost exclusively in their database system. This tends to be quite a common approach that <a href="https://petabridge.com/blog/high-optionality-programming-pt1/">drastically reduces the options</a> you get from a scalability standpoint (both human and technical).</p>
+<h2 id="functional-programming">Functional programming</h2>
+<p>Functional programming doesn't have mutations, therefore we cannot abstract over data races, and we also have ways to composing data structures into bigger data structures, simply because the main rule of thumb here is that everything is immutable. FP comes with a level of abstraction that allows us to embed logic in computational units that are easier to reason about and truly achieve the level of abstraction and composabillity that we require, by:</p>
+<ol>
+<li>Handling abstractions via data types (or sets)</li>
+<li>Handling mutations via morphisms</li>
+<li>Handling composability via functional composition</li>
+</ol>
+<p>Using this paradigm properly we'll still be able to do very high level programming and hiding most of the implementation details that we shouldn't care, but under a different set of rules. These are all properties that we've used first hand this semester and everything was centered around them, although the type system that C# has at the moment didn't really make it as straight forward as it should have been.</p>
+<p>Based on this very brief summary one would argue that these properties are also just a set of arbitrary rules that may become subject to some other shortcomings further down the line. The counterargument here is that all of those properties are actually based on Category Theory, which is a pure mathematical structure, rooted in formal logic, which has an identical application in computational calculus (<a href="https://disi.unitn.it/%7Ebernardi/RSISE11/Papers/curry-howard.pdf">see the Curry-Howard isomorphism</a> - or a brief overview on <a href="https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence">Wikipedia</a>). Check the '<a href="https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence#General_formulation">General formulation</a>' paragraph for the direct mapping of them.</p>
+<h2 id="domain-driven-design">Domain Driven Design</h2>
+<p>What DDD has to do with all of this? Well, Category Theory enforces us to map everything on top of domains, regardless if those are purely scientific/abstract domains or BLOBAs. The way DDD enforces us to think about the domain model has a direct correspondence in Category Theory. Disclaimer, here, it isn't required to understand all those cryptic abstractions presented in most of the references provided above, what we actually need is to:</p>
+<ol>
+<li>Be able to view data types as sets</li>
+<li>Understand morphisms as transitions between those sets</li>
+<li>Be able to view those morphisms as types - <a href="https://www.youtube.com/watch?v=SknxggwRPzU&amp;ab_channel=Computerphile">Propositions as types</a></li>
+<li>Understand the main constructs that allows us to achieve that (Functors, Monoids, Monads)</li>
+</ol>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
