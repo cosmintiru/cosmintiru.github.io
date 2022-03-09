@@ -12,7 +12,7 @@
           "hash": "MinmvGBPuSE0lO83YsgFjcWoSThfOQt0pfabXwN6PZg="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "addendum/products.html",
-          "hash": "5sOp81OSY/B+WieBI7d2nRI+yFvOzXF2q65vYZXZWu8="
+          "hash": "hK3a7NVjxN/jv/rCHG5NZGT5WDpxuqY+ShIZu6AadkE="
         }
       },
       "is_incremental": false,
@@ -36,7 +36,7 @@
           "hash": "KArjy+ELbgx8RHx4YQevfGiXVBB0sxEOs/xeSEfR5L0="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
